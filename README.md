@@ -4,7 +4,7 @@ A feedforward neural network (multilayer perceptron) implemented from scratch in
 
 The network runs inference with pre-trained weights. Training was not part of the project.
 
-Example
+# Example
 $ ./mlpnetwork parameters/w1 parameters/w2 parameters/w3 parameters/w4 \
                parameters/b1 parameters/b2 parameters/b3 parameters/b4
 Please insert image path:
@@ -22,7 +22,7 @@ image 28×28 ──vectorize──▶ 784 ──▶ 128 ──▶ 64 ──▶ 2
 
 Each layer computes activation(W · x + b). The index of the largest of the 10 output probabilities is the predicted digit.
 
-Project structure
+# Project structure
 File	Responsibility
 Matrix.h / Matrix.cpp	A float matrix stored in one contiguous row-major array on the heap. Arithmetic operators, element access, transpose, vectorize, argmax, rref, binary file reading
 Activation.h / Activation.cpp	relu and softmax in the activation namespace
@@ -40,7 +40,7 @@ make
 
 Enter image paths relative to the project folder, for example images/im3. Note that the file number is not the digit: im0 is a 5.
 
-Implementation notes
+# Implementation notes
 Rule of three. Matrix owns its array, so it implements a deep-copying copy constructor, a copy assignment operator and a destructor that uses delete[].
 Exception-safe assignment. operator= allocates and copies the new data before releasing the old array, so a failed allocation leaves the object unchanged.
 Validated construction. The constructor rejects non-positive dimensions before allocating, so a matrix is never empty and a throwing constructor never leaks.
@@ -52,7 +52,7 @@ Decoupled activations. Each Dense layer holds a function pointer, so a layer doe
 
 Memory was checked with valgrind --leak-check=full: no leaks and no invalid accesses.
 
-Known limitations and possible improvements
+# Known limitations and possible improvements
 Softmax overflow. softmax applies exp directly to its input, so very large values (for example [100, 200, 300]) overflow to inf and produce NaN. Subtracting the maximum value before exp fixes this without changing the result.
 No move semantics. Every layer's output is copied into the loop variable. A move constructor and move assignment operator would replace these copies with a pointer swap. Using std::vector<float> instead of new[] would give correct copy and move behavior for free.
 Fixed number of layers. MlpNetwork stores its layers in a fixed array, which also forces Dense to have a default constructor with no activation. A std::vector<Dense> built with emplace_back would support any depth and allow that constructor to be removed.
